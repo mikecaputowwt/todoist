@@ -4,6 +4,7 @@ import {
   FaInbox,
   FaRegCalendarAlt,
   FaRegCalendar,
+  FaCloudUploadAlt,
 } from 'react-icons/fa';
 import { Projects } from '../Projects';
 import { useSelectedProjectValue } from '../../context';
@@ -93,6 +94,32 @@ export const Sidebar = () => {
               <FaRegCalendarAlt />
             </span>
             <span>Next 7 days</span>
+          </div>
+        </li>
+        <li
+          data-testid="future"
+          className={active === 'future' ? 'active' : undefined}
+        >
+          <div
+            data-testid="future-action"
+            aria-label="Show future tasks"
+            tabIndex={0}
+            role="button"
+            onClick={() => {
+              setActive('future');
+              setSelectedProject('FUTURE');
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                setActive('future');
+                setSelectedProject('FUTURE');
+              }
+            }}
+          >
+            <span>
+              <FaCloudUploadAlt />
+            </span>
+            <span>Future</span>
           </div>
         </li>
       </ul>
