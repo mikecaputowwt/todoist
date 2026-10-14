@@ -40,6 +40,12 @@ export const useTasks = selectedProject => {
                 moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') <= 7 &&
                 task.archived !== true
             )
+          : selectedProject === 'FUTURE'
+          ? newTasks.filter(
+              task =>
+                moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') > 7 &&
+                task.archived !== true
+            )
           : newTasks.filter(task => task.archived !== true)
       );
       setArchivedTasks(newTasks.filter(task => task.archived !== false));
