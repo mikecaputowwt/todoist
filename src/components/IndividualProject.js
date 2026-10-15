@@ -67,5 +67,8 @@ export const IndividualProject = ({ project }) => {
 };
 
 IndividualProject.propTypes = {
-  project: PropTypes.object.isRequired,
+  project: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    docId: PropTypes.string.isRequired,
+  }).isRequired,
 };
