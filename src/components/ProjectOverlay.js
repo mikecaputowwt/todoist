@@ -43,5 +43,7 @@ export const ProjectOverlay = ({
 };
 
 ProjectOverlay.propTypes = {
-  projects: PropTypes.array,
+  setProject: PropTypes.func.isRequired,
+  showProjectOverlay: PropTypes.bool.isRequired,
+  setShowProjectOverlay: PropTypes.func.isRequired,
 };
