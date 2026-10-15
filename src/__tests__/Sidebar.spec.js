@@ -93,6 +93,29 @@ describe('<Sidebar />', () => {
       expect(queryByTestId('inbox').classList.contains('active')).toBeFalsy();
     });
 
+    it('changes the active project to future in collated tasks', () => {
+      const { queryByTestId } = render(<Sidebar />);
+      expect(queryByTestId('sidebar')).toBeTruthy();
+      fireEvent.click(queryByTestId('future-action'));
+      fireEvent.click(queryByTestId('inbox-action'));
+      fireEvent.keyDown(queryByTestId('future-action'), {
+        key: 'a',
+        code: 65,
+      });
+
+      expect(queryByTestId('future').classList.contains('active')).toBeFalsy();
+      expect(queryByTestId('today').classList.contains('active')).toBeFalsy();
+      expect(queryByTestId('inbox').classList.contains('active')).toBeTruthy();
+
+      fireEvent.keyDown(queryByTestId('future-action'), {
+        key: 'Enter',
+        code: 13,
+      });
+      expect(queryByTestId('future').classList.contains('active')).toBeTruthy();
+      expect(queryByTestId('today').classList.contains('active')).toBeFalsy();
+      expect(queryByTestId('inbox').classList.contains('active')).toBeFalsy();
+    });
+
     it('hides and shows the sidebar projects using onClick', () => {
       const { queryByTestId, queryByText, getByText } = render(<Sidebar />);
       expect(queryByTestId('sidebar')).toBeTruthy();
