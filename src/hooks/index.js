@@ -3,16 +3,18 @@ import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { firebase } from '../firebase';
 import { collatedTasksExist } from '../helpers';
+import { useUserValue } from '../context';
 
 export const useTasks = selectedProject => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
+  const { userId } = useUserValue();
 
   useEffect(() => {
     let unsubscribe = firebase
       .firestore()
       .collection('tasks')
-      .where('userId', '==', 'jlIFXIwyAL3tzHMtzRbw');
+      .where('userId', '==', userId);
 
     unsubscribe =
       selectedProject && !collatedTasksExist(selectedProject)
@@ -37,13 +39,13 @@ export const useTasks = selectedProject => {
         selectedProject === 'NEXT_7'
           ? newTasks.filter(
               task =>
-                moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') <= 7 &&
+                moment(task.date, 'DD/MM/YYYY').diff(moment(), 'days') <= 7 &&
                 task.archived !== true
             )
           : selectedProject === 'FUTURE'
           ? newTasks.filter(
               task =>
-                moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') > 7 &&
+                moment(task.date, 'DD/MM/YYYY').diff(moment(), 'days') > 7 &&
                 task.archived !== true
             )
           : newTasks.filter(task => task.archived !== true)
@@ -52,32 +54,32 @@ export const useTasks = selectedProject => {
     });
 
     return () => unsubscribe();
-  }, [selectedProject]);
+  }, [selectedProject, userId]);
 
   return { tasks, archivedTasks };
 };
 
 export const useProjects = () => {
   const [projects, setProjects] = useState([]);
+  const { userId } = useUserValue();
 
   useEffect(() => {
-    firebase
+    let unsubscribe = firebase
       .firestore()
       .collection('projects')
-      .where('userId', '==', 'jlIFXIwyAL3tzHMtzRbw')
+      .where('userId', '==', userId)
       .orderBy('projectId')
-      .get()
-      .then(snapshot => {
+      .onSnapshot(snapshot => {
         const allProjects = snapshot.docs.map(project => ({
           ...project.data(),
           docId: project.id,
         }));
 
-        if (JSON.stringify(allProjects) !== JSON.stringify(projects)) {
-          setProjects(allProjects);
-        }
+        setProjects(allProjects);
       });
-  }, [projects]);
+
+    return () => unsubscribe();
+  }, [userId]);
 
   return { projects, setProjects };
 };
