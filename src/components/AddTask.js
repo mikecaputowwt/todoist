@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { FaRegListAlt, FaRegCalendarAlt } from 'react-icons/fa';
+import { FaRegListAlt, FaRegCalendarAlt, FaTag } from 'react-icons/fa';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { firebase } from '../firebase';
 import { useSelectedProjectValue } from '../context';
 import { ProjectOverlay } from './ProjectOverlay';
 import { TaskDate } from './TaskDate';
+import { TagOverlay } from './TagOverlay';
+import { TagDisplay } from './TagDisplay';
 
 export const AddTask = ({
   showAddTaskMain = true,
@@ -19,6 +21,8 @@ export const AddTask = ({
   const [showMain, setShowMain] = useState(shouldShowMain);
   const [showProjectOverlay, setShowProjectOverlay] = useState(false);
   const [showTaskDate, setShowTaskDate] = useState(false);
+  const [showTagOverlay, setShowTagOverlay] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const { selectedProject } = useSelectedProjectValue();
 
@@ -29,7 +33,9 @@ export const AddTask = ({
     if (projectId === 'TODAY') {
       collatedDate = moment().format('DD/MM/YYYY');
     } else if (projectId === 'NEXT_7') {
-      collatedDate = moment().add(7, 'days').format('DD/MM/YYYY');
+      collatedDate = moment()
+        .add(7, 'days')
+        .format('DD/MM/YYYY');
     }
 
     return (
@@ -44,12 +50,14 @@ export const AddTask = ({
           task,
           date: collatedDate || taskDate,
           userId: 'jlIFXIwyAL3tzHMtzRbw',
+          tags: selectedTags.map(tag => tag.id), // Add tags array to task
         })
         .then(() => {
           setTask('');
           setProject('');
           setShowMain('');
           setShowProjectOverlay(false);
+          setSelectedTags([]); // Reset selected tags
         })
     );
   };
@@ -64,7 +72,7 @@ export const AddTask = ({
           className="add-task__shallow"
           data-testid="show-main-action"
           onClick={() => setShowMain(!showMain)}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === 'Enter') setShowMain(!showMain);
           }}
           tabIndex={0}
@@ -91,7 +99,7 @@ export const AddTask = ({
                     setShowProjectOverlay(false);
                     setShowQuickAddTask(false);
                   }}
-                  onKeyDown={(e) => {
+                  onKeyDown={e => {
                     if (e.key === 'Enter') {
                       setShowMain(false);
                       setShowProjectOverlay(false);
@@ -116,14 +124,23 @@ export const AddTask = ({
             showTaskDate={showTaskDate}
             setShowTaskDate={setShowTaskDate}
           />
+          <TagOverlay
+            showTagOverlay={showTagOverlay}
+            setShowTagOverlay={setShowTagOverlay}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+          />
           <input
             className="add-task__content"
             aria-label="Enter your task"
             data-testid="add-task-content"
             type="text"
             value={task}
-            onChange={(e) => setTask(e.target.value)}
+            onChange={e => setTask(e.target.value)}
           />
+          {selectedTags.length > 0 && (
+            <TagDisplay tags={selectedTags} />
+          )}
           <button
             type="button"
             className="add-task__submit"
@@ -143,11 +160,13 @@ export const AddTask = ({
               onClick={() => {
                 setShowMain(false);
                 setShowProjectOverlay(false);
+                setSelectedTags([]);
               }}
-              onKeyDown={(e) => {
+              onKeyDown={e => {
                 if (e.key === 'Enter') {
                   setShowMain(false);
                   setShowProjectOverlay(false);
+                  setSelectedTags([]);
                 }
               }}
               aria-label="Cancel adding a task"
@@ -161,7 +180,7 @@ export const AddTask = ({
             className="add-task__project"
             data-testid="show-project-overlay"
             onClick={() => setShowProjectOverlay(!showProjectOverlay)}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === 'Enter') setShowProjectOverlay(!showProjectOverlay);
             }}
             tabIndex={0}
@@ -171,15 +190,27 @@ export const AddTask = ({
           </span>
           <span
             className="add-task__date"
-            data-testid="show-task-date-overlay"
+            data-testid="show-task-date"
             onClick={() => setShowTaskDate(!showTaskDate)}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === 'Enter') setShowTaskDate(!showTaskDate);
             }}
             tabIndex={0}
             role="button"
           >
             <FaRegCalendarAlt />
+          </span>
+          <span
+            className="add-task__tag"
+            data-testid="show-tag-overlay"
+            onClick={() => setShowTagOverlay(!showTagOverlay)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') setShowTagOverlay(!showTagOverlay);
+            }}
+            tabIndex={0}
+            role="button"
+          >
+            <FaTag />
           </span>
         </div>
       )}

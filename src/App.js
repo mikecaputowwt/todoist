@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Header } from './components/layout/Header';
 import { Content } from './components/layout/Content';
-import { ProjectsProvider, SelectedProjectProvider } from './context';
+import { ProjectsProvider, SelectedProjectProvider, TagsProvider } from './context';
 
 export const App = ({ darkModeDefault = false }) => {
   const [darkMode, setDarkMode] = useState(darkModeDefault);
@@ -10,13 +10,15 @@ export const App = ({ darkModeDefault = false }) => {
   return (
     <SelectedProjectProvider>
       <ProjectsProvider>
-        <main
-          data-testid="application"
-          className={darkMode ? 'darkmode' : undefined}
-        >
-          <Header darkMode={darkMode} setDarkMode={setDarkMode} />
-          <Content />
-        </main>
+        <TagsProvider>
+          <main
+            data-testid="application"
+            className={darkMode ? 'darkmode' : undefined}
+          >
+            <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+            <Content />
+          </main>
+        </TagsProvider>
       </ProjectsProvider>
     </SelectedProjectProvider>
   );
