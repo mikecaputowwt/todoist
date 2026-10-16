@@ -30,12 +30,17 @@ export const Tasks = () => {
     document.title = `${projectName}: Todoist`;
   });
 
+  // Sort tasks alphabetically by task name (A-Z) with case-insensitive comparison
+  const sortedTasks = tasks.slice().sort((a, b) =>
+    a.task.toLowerCase().localeCompare(b.task.toLowerCase())
+  );
+
   return (
     <div className="tasks" data-testid="tasks">
       <h2 data-testid="project-name">{projectName}</h2>
 
       <ul className="tasks__list">
-        {tasks.map((task) => (
+        {sortedTasks.map((task) => (
           <li key={`${task.id}`}>
             <Checkbox id={task.id} taskDesc={task.task} />
             <span>{task.task}</span>
