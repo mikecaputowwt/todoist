@@ -10,6 +10,12 @@ import {
   useSelectedProjectValue,
 } from './selected-project-context';
 
+import {
+  TagsContext,
+  TagsProvider,
+  useTagsValue,
+} from './tags-context';
+
 export {
   ProjectsContext,
   ProjectsProvider,
@@ -17,4 +23,7 @@ export {
   SelectedProjectContext,
   SelectedProjectProvider,
   useSelectedProjectValue,
+  TagsContext,
+  TagsProvider,
+  useTagsValue,
 };
