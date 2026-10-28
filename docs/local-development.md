@@ -38,7 +38,7 @@ Opens [http://localhost:3000](http://localhost:3000) with hot reload.
 ```bash
 yarn test       # or: npm test
 ```
-Interactive test runner with 90% coverage thresholds. Tests run in watch mode by default.
+Runs `react-scripts test --watchAll` - interactive test runner with 90% coverage thresholds and watch mode enabled.
 
 **Build for production:**
 ```bash
