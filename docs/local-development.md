@@ -36,9 +36,9 @@ Opens [http://localhost:3000](http://localhost:3000) with hot reload.
 
 **Run tests:**
 ```bash
-yarn test --watchAll    # or: npm test
+yarn test       # or: npm test
 ```
-Interactive test runner with 90% coverage thresholds.
+Interactive test runner with 90% coverage thresholds. Tests run in watch mode by default.
 
 **Build for production:**
 ```bash
