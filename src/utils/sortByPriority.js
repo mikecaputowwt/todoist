@@ -1,10 +1,10 @@
 /**
- * Sort todos by priority (high > medium > low)
- * Uses stable sort to preserve original order for equal priorities
+ * Sort todos by priority order: high > medium > low
+ * Maintains stable sort (preserves original order for equal priorities)
  * Does not mutate the input array
- * 
+ *
  * @param {Array} todos - Array of todo objects with priority field
- * @returns {Array} New sorted array
+ * @returns {Array} New sorted array ordered by priority
  */
 export const sortByPriority = (todos) => {
   const priorityOrder = {
@@ -13,7 +13,7 @@ export const sortByPriority = (todos) => {
     low: 3,
   };
 
-  // Create a shallow copy to avoid mutating the input
+  // Create shallow copy to avoid mutating input
   return [...todos].sort((a, b) => {
     const priorityA = priorityOrder[a.priority] || 4;
     const priorityB = priorityOrder[b.priority] || 4;
