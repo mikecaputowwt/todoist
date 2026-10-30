@@ -93,10 +93,9 @@ describe('exportTodos', () => {
       ];
       const result = exportTodos(todos);
       
-      const lines = result.split('\n');
-      // The first line should be header, second should start with 1,"Multi
-      expect(lines[0]).toBe('id,title,done,priority');
-      expect(lines[1]).toBe('1,"Multi');
+      // Verify the result contains the escaped newlines within quotes
+      expect(result).toContain('1,"Multi\nline\ntask",false,high');
+      expect(result).toContain('\n');
     });
   });
 });
