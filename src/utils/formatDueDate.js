@@ -10,40 +10,12 @@ export const formatDueDate = (date) => {
   const inputDate = new Date(date);
   inputDate.setHours(0, 0, 0, 0);
 
-  const diffTime = inputDate - today;
-  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = Math.round((inputDate - today) / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) {
-    return 'Today';
-  }
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Tomorrow';
+  if (diffDays < 0) return `Overdue by ${Math.abs(diffDays)} days`;
 
-  if (diffDays === 1) {
-    return 'Tomorrow';
-  }
-
-  if (diffDays < 0) {
-    const daysOverdue = Math.abs(diffDays);
-    return `Overdue by ${daysOverdue} days`;
-  }
-
-  // For dates more than 1 day in the future, return "Mon DD" format
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
-
-  const month = monthNames[inputDate.getMonth()];
-  const day = inputDate.getDate();
-
-  return `${month} ${day}`;
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[inputDate.getMonth()]} ${inputDate.getDate()}`;
 };
