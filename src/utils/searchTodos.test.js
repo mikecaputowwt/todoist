@@ -180,4 +180,54 @@ describe('searchTodos', () => {
       expect(sampleTodos).toEqual(original);
     });
   });
+
+  describe('Input validation', () => {
+    it('returns empty array if todos is not an array', () => {
+      const result = searchTodos(null, 'query');
+      expect(result).toEqual([]);
+    });
+
+    it('returns empty array if todos is undefined', () => {
+      const result = searchTodos(undefined, 'query');
+      expect(result).toEqual([]);
+    });
+
+    it('returns empty array if todos is an object', () => {
+      const result = searchTodos({ id: 1, title: 'test' }, 'query');
+      expect(result).toEqual([]);
+    });
+
+    it('returns empty array if query is not a string', () => {
+      const result = searchTodos(sampleTodos, null);
+      expect(result).toEqual([]);
+    });
+
+    it('returns empty array if query is undefined', () => {
+      const result = searchTodos(sampleTodos, undefined);
+      expect(result).toEqual([]);
+    });
+
+    it('returns empty array if query is a number', () => {
+      const result = searchTodos(sampleTodos, 123);
+      expect(result).toEqual([]);
+    });
+
+    it('handles todos with missing title field', () => {
+      const todos = [
+        { id: 1, notes: 'Some notes' },
+      ];
+      const result = searchTodos(todos, 'notes');
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe(1);
+    });
+
+    it('handles todos with missing notes field', () => {
+      const todos = [
+        { id: 1, title: 'Test' },
+      ];
+      const result = searchTodos(todos, 'test');
+      expect(result).toHaveLength(1);
+      expect(result[0].id).toBe(1);
+    });
+  });
 });

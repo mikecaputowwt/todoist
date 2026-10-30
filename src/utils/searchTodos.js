@@ -5,6 +5,14 @@
  * @returns {Array} Filtered array of matching todos
  */
 export const searchTodos = (todos, query) => {
+  // Validate inputs
+  if (!Array.isArray(todos)) {
+    return [];
+  }
+  if (typeof query !== 'string') {
+    return [];
+  }
+
   // Trim leading and trailing whitespace
   const trimmedQuery = query.trim();
 
